@@ -4,7 +4,7 @@ local Window = Luna:CreateWindow({
 	Subtitle = "AireszHub",
 	LogoID = "82795327169782",
 	LoadingEnabled = true,
-	LoadingTitle = yes,
+	LoadingTitle = tostring(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name),
 	LoadingSubtitle = "AireszHub",
 
 	ConfigSettings = {
