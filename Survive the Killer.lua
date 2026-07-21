@@ -104,7 +104,7 @@ Tab:CreateToggle({
 	Callback = function(v)
 		getgenv().loot = v
         while getgenv().loot do
-            wait(0.2)
+            wait()
             if not setheal then
                 for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
                     if v.Name == "LootSpawns" then
@@ -139,7 +139,17 @@ Tab:CreateToggle({
 	Description = "Remove All Trap",
 	CurrentValue = false,
 	Callback = function(v)
-		
+		getgenv().removetrap = v
+        while getgenv().removetrap do
+			wait(1)
+			for i,v in pairs(game.Workspace:GetDescendants()) do
+				if v.Name == "Trap" or v.Name == "RatTraps" then
+                    repeat wait()
+					v:Destroy()
+                    until v == nil or not getgenv().removetrap
+				end
+			end
+		end
 	end
 })
 
