@@ -88,11 +88,6 @@ function firetool()
     game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
 end
 --------------------------------
-local thl = {}
-for i, v in pairs(game:GetService("Workspace").mapCrystalsFolder:GetChildren()) do
-    thl[i] = v.Name
-end
---------------------------------
 local Noclip = nil
 local Clip = nil
 
@@ -1191,8 +1186,10 @@ local ShopTab = Window:CreateTab({
 ShopTab:CreateDropdown({
 	Name = "Select Crystal",
 	Description = nil,
-	Options = thl,
-	CurrentOption = thl[1],
+	Options = {
+        "Blue Crystal", "Frost Crystal", "Galaxy Oracle Crystal", "Green Crystal", "Inferno Crystal", "Jungle Crystal", "Legends Crystal", "Muscle Elite Crystal", "Mythical Crystal"
+    },
+	CurrentOption = "Blue Crystal",
 	MultipleOptions = false,
 	SpecialType = nil,
 	Callback = function(v)
