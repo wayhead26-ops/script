@@ -1,3 +1,4 @@
+if game.PlaceId == 3623096087 then
 local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/master/source.lua", true))()
 local Window = Luna:CreateWindow({
 	Name = tostring(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name),
@@ -12,7 +13,7 @@ local Window = Luna:CreateWindow({
 		ConfigFolder = "Airesz Hub"
 	},
 
-	KeySystem = true,
+	KeySystem = false,
 	KeySettings = {
 		Title = "AireszHub",
 		Subtitle = "Key System",
@@ -22,7 +23,7 @@ local Window = Luna:CreateWindow({
 		Key = {"12333333"},
 		SecondAction = {
 			Enabled = true,
-			Type = "5hazzAq7B",
+			Type = "Link",
 			Parameter = "https://direct-link.net/464933/wGO8yDYW4cQd"
 		}
 	}
@@ -1544,3 +1545,4 @@ local ConfigTab = Window:CreateTab({
 	ShowTitle = true
 })
 ConfigTab:BuildConfigSection()
+end
