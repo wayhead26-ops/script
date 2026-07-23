@@ -1,57 +1,38 @@
-local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/master/source.lua", true))()
-local Window = Luna:CreateWindow({
-	Name = tostring(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name),
-	Subtitle = "AireszHub",
-	LogoID = "82795327169782",
-	LoadingEnabled = true,
-	LoadingTitle = tostring(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name),
-	LoadingSubtitle = "AireszHub",
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
-	ConfigSettings = {
-		RootFolder = nil,
-		ConfigFolder = "Airesz Hub"
-	},
-
-	KeySystem = true,
-	KeySettings = {
-		Title = "AireszHub",
-		Subtitle = "Key System",
-		Note = "",
-		SaveInRoot = false,
-		SaveKey = true,
-		Key = {"12333333"},
-		SecondAction = {
-			Enabled = true,
-			Type = "5hazzAq7B",
-			Parameter = "https://direct-link.net/464933/wGO8yDYW4cQd"
-		}
-	}
+local Window = Fluent:CreateWindow({
+    Title = tostring(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name),
+    SubTitle = "",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.Minus
 })
 
-Window:CreateHomeTab({
-	SupportedExecutors = {
-		"Synapse X",
-		"Krnl",
-		"ProtoSmasher",
-		"Fluxus",
-		"Script-Ware",
-		"EasyExploits",
-		"Electron",
-		"JJSploit",
-		"Calamari",
-		"SirHurt",
-		"Sentinel",
-		"WEAREDEVS",
-		"Comet",
-		"Cellery",
-		"Wave",
-		"CODex",
-		"Delta"
-	},
-	DiscordInvite = "5hazzAq7B",
-	Icon = 1
-})
-----------------------------function
+local Tabs = {
+    Main = Window:AddTab({Title = "Main", Icon = "home"}),
+    Esp = Window:AddTab({Title = "Esp", Icon = "person-standing"}),
+    Teleport = Window:AddTab({Title = "Teleport", Icon = "venetian-mask"}),
+    Misc = Window:AddTab({Title = "Misc", Icon = "more-horizontal"}),
+    Settings = Window:AddTab({Title = "Settings", Icon = "settings"})}
+
+----------------------------------function
+local PlayerList = {}
+for _, v in pairs(game.Teams.Survivor:GetPlayers()) do
+    if v ~= game.Players.LocalPlayer then
+        table.insert(PlayerList, v.Name)
+    end
+end
+local plr = {}
+for i, v in pairs(game.Players:GetPlayers()) do
+    if v ~= game.Players.LocalPlayer then
+        table.insert(plr, v.Name)
+    end
+end
+-------------------------
 local Noclip = nil
 local Clip = nil
 
@@ -65,7 +46,7 @@ function noclip()
 				end
 			end
 		end
-		wait(0.21) -- basic optimization
+		wait(0.21)
 	end
 	Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
 end
@@ -85,20 +66,12 @@ ESP.TeamColor = false
 local setheal = false
 
 --------------------------------------
-
-local Tab = Window:CreateTab({
-	Name = "Main",
-	Icon = "view_in_ar",
-	ImageSource = "Material",
-	ShowTitle = true
-})
-
-Tab:CreateToggle({
-	Name = "Toggle Escape",
-	Description = "Auto Exit",
-	CurrentValue = false,
-	Callback = function(v)
-		getgenv().win = v
+Tabs.Main:AddToggle("Auto Escape", {
+    Title = "Toggle Escape",
+    Description = "Auto Exit",
+    Default = false,
+    Callback = function(v)
+        getgenv().win = v
         while getgenv().win do
             wait(0.5)
             if game.Players.LocalPlayer.Team == game.Teams.Survivor then
@@ -119,15 +92,15 @@ Tab:CreateToggle({
                 end
             end
         end
-	end
+    end
 })
 
-Tab:CreateToggle({
-	Name = "Toggle Collect Loot",
+Tabs.Main:AddToggle("Auto Collect Loot", {
+    Title = "Toggle Collect Loot",
 	Description = "Collect All Loot In Map",
-	CurrentValue = false,
-	Callback = function(v)
-		getgenv().loot = v
+    Default = false,
+    Callback = function(v)
+        getgenv().loot = v
         while getgenv().loot do
             wait(0.2)
             if not setheal then
@@ -156,15 +129,15 @@ Tab:CreateToggle({
                 end
             end
         end
-	end
+    end
 })
 
-Tab:CreateToggle({
-	Name = "Toggle Remove Trap",
-	Description = "Remove All Trap",
-	CurrentValue = false,
-	Callback = function(v)
-		getgenv().removetrap = v
+Tabs.Main:AddToggle("Auto Remove Trap", {
+    Title = "Toggle Remove Trap",
+	Description = "Remove All Killer Trap",
+    Default = false,
+    Callback = function(v)
+        getgenv().removetrap = v
         while getgenv().removetrap do
 			wait(0.7)
 			for i,v in pairs(game.Workspace:GetDescendants()) do
@@ -173,21 +146,18 @@ Tab:CreateToggle({
 				end
 			end
 		end
-	end
+    end
 })
 
-Tab:CreateDivider()
-Tab:CreateLabel({
-	Text = "Survivor",
-	Style = 2
+Tabs.Main:AddParagraph({
+    Title = "Survivor Section",
 })
-
-Tab:CreateToggle({
-	Name = "Toggle Heal",
+Tabs.Main:AddToggle("AUto Heal", {
+    Title = "Toggle Heal",
 	Description = "Heal Yourself When Get Caught",
-	CurrentValue = false,
-	Callback = function(v)
-		getgenv().revivelocalplayer = v
+    Default = false,
+    Callback = function(v)
+        getgenv().revivelocalplayer = v
         while getgenv().revivelocalplayer do
             wait()
             if game.Players.LocalPlayer.Team == game:GetService('Teams').Survivor then
@@ -200,26 +170,26 @@ Tab:CreateToggle({
                 end
             end
         end
-	end
+    end
 })
 
-Tab:CreateDivider()
-
-Tab:CreateSlider({
-	Name = "Set Distance Other Player From Killer",
-	Range = {0, 100},
-	Increment = 1,
-	CurrentValue = 26,
-	Callback = function(v)
-		setdistancerevive = tonumber(v)
-	end
+Tabs.Main:AddSlider("Distance Player", {
+    Title = "Set Distance Other Player From Killer",
+    Default = 26,
+    Min = 15,
+    Max = 100,
+    Rounding = 1,
+    Callback = function(v)
+        setdistancerevive = tonumber(v)
+    end
 })
-Tab:CreateToggle({
-	Name = "Toggle Heal Player",
+
+Tabs.Main:AddToggle("Auto Revive Player Toggle", {
+    Title = "Toggle Heal Player",
 	Description = "Heal Others Players",
-	CurrentValue = false,
-	Callback = function(v)
-		getgenv().reviveplayer = v
+    Default = false,
+    Callback = function(v)
+        getgenv().reviveplayer = v
         while getgenv().reviveplayer do
             wait()
             if game.Players.LocalPlayer.Team == game.Teams.Survivor then
@@ -247,27 +217,26 @@ Tab:CreateToggle({
                 end
             end
         end
-	end
+    end
 })
 
-Tab:CreateDivider()
-
-Tab:CreateSlider({
-	Name = "Set Distance From Killer",
-	Range = {0, 100},
-	Increment = 1,
-	CurrentValue = 26,
-	Callback = function(v)
-		setdistance = tonumber(v)
-	end
+Tabs.Main:AddSlider("Safe Teleport", {
+    Title = "Set Distance From Killer",
+    Default = 26,
+    Min = 15,
+    Max = 100,
+    Rounding = 1,
+    Callback = function(v)
+        setdistance = tonumber(v)
+    end
 })
 
-Tab:CreateToggle({
-	Name = "Toggle Safe Place",
+Tabs.Main:AddToggle("Auto Safe Teleport Toggle", {
+    Title = "Toggle Safe Place",
 	Description = "Teleport To Safe Place When Killer Is Nearby",
-	CurrentValue = false,
-	Callback = function(v)
-		getgenv().safetp = v
+    Default = false,
+    Callback = function(v)
+        getgenv().safetp = v
         while getgenv().safetp do
             wait()
             if game.Players.LocalPlayer.Team == game.Teams.Survivor then
@@ -283,21 +252,37 @@ Tab:CreateToggle({
                 end
             end
         end
-	end
+    end
 })
 
-Tab:CreateDivider()
-Tab:CreateLabel({
-	Text = "Killer",
-	Style = 2
+Tabs.Main:AddParagraph({
+    Title = "Killer Section",
 })
 
-Tab:CreateToggle({
-	Name = "Toggle Kill All",
+local Killone = Tabs.Main:AddDropdown("Killselectedplayer", {
+    Title = "Kill Selected Player",
+    Description = "Select Player To Kill",
+    Values = PlayerList,
+    Multi = false,
+    Default = nil,
+    Callback = function(selectkillplr)
+        for i, v in pairs(game.Players:GetPlayers()) do
+            if v ~= game.Players.LocalPlayer and v.Name == selectkillplr and game.Players.LocalPlayer.Team == game.Teams.Killer and v.Team == game.Teams.Survivor and game.Players.LocalPlayer.Character:FindFirstChild("Knife") and game.Players.LocalPlayer.Character.Knife:FindFirstChild("KnifeAttachment") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                    firetouchinterest(v.Character.HumanoidRootPart, game.Players.LocalPlayer.Character.Knife.KnifeAttachment, 0)
+                    firetouchinterest(v.Character.HumanoidRootPart, game.Players.LocalPlayer.Character.Knife.KnifeAttachment, 1)
+                end
+            end
+        end
+    end
+})
+
+Tabs.Main:AddToggle("Kill All Toggle", {
+    Title = "Toggle Kill All",
 	Description = "Auto Kill All Player When Become A Killer",
-	CurrentValue = false,
-	Callback = function(v)
-		getgenv().kill = v
+    Default = false,
+    Callback = function(v)
+        getgenv().kill = v
         while getgenv().kill do
             wait()
             for i, v in pairs(game.Players:GetPlayers()) do
@@ -309,57 +294,22 @@ Tab:CreateToggle({
                 end
             end
         end
-	end
+    end
 })
 
-Tab:CreateDivider()
-
-Tab:CreateSlider({
-	Name = "Kill Aura Distance",
-	Range = {0, 100},
-	Increment = 1,
-	CurrentValue = 26,
-	Callback = function(v)
-		setaura = tonumber(v)
-	end
+Tabs.Main:AddSlider("Slash Aura Distances", {
+    Title = "Slash Aura Distance",
+    Default = 20,
+    Min = 5,
+    Max = 100,
+    Rounding = 1,
+    Callback = function(v)
+        setstab = tonumber(v)
+    end
 })
 
-Tab:CreateToggle({
-	Name = "Toggle Kill Aura",
-	Description = "Kill When Player Is Near You",
-	CurrentValue = false,
-	Callback = function(v)
-		getgenv().killaura = v
-        while getgenv().killaura do
-            wait()
-            for i, v in pairs(game.Players:GetPlayers()) do
-                if v ~= game.Players.LocalPlayer and game.Players.LocalPlayer.Team == game.Teams.Killer and v.Team == game.Teams.Survivor and game.Players.LocalPlayer.Character:FindFirstChild("Knife") and game.Players.LocalPlayer.Character.Knife:FindFirstChild("KnifeAttachment") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                    if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
-                        if (v.Character.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude < setaura then
-                            firetouchinterest(v.Character.HumanoidRootPart, game.Players.LocalPlayer.Character.Knife.KnifeAttachment, 0)
-                            firetouchinterest(v.Character.HumanoidRootPart, game.Players.LocalPlayer.Character.Knife.KnifeAttachment, 1)
-                        end
-                    end
-                end
-            end
-        end
-	end
-})
-
-Tab:CreateDivider()
-
-Tab:CreateSlider({
-	Name = "Slash Aura Distance",
-	Range = {0, 100},
-	Increment = 1,
-	CurrentValue = 26,
-	Callback = function(v)
-		setstab = tonumber(v)
-	end
-})
-
-Tab:CreateToggle({
-	Name = "Toggle Slash Aura",
+Tabs.Main:AddToggle("Slash Aura Toggle", {
+    Title = "Toggle Slash Aura",
 	Description = "Slash When Player Is Near You",
 	CurrentValue = false,
 	Callback = function(v)
@@ -381,103 +331,92 @@ Tab:CreateToggle({
                 end
             end
         end
-	end
+    end
 })
-
-local EspTab = Window:CreateTab({
-	Name = "Esp",
-	Icon = "account_tree",
-	ImageSource = "Material",
-	ShowTitle = true
+Tabs.Main:AddSlider("Slash Distance", {
+    Title = "Kill Aura Distance",
+    Default = 20,
+    Min = 5,
+    Max = 100,
+    Rounding = 1,
+    Callback = function(v)
+        setaura = tonumber(v)
+    end
 })
-
-EspTab:CreateToggle({
-	Name = "Toggle Esp",
-	Description = nil,
+Tabs.Main:AddToggle("Kill Aura Toggle", {
+    Title = "Toggle Kill Aura",
+	Description = "Kill When Player Is Near You",
 	CurrentValue = false,
 	Callback = function(v)
-		ESP.Players = v
-	end
-})
-
-EspTab:CreateToggle({
-	Name = "Toggle Name",
-	Description = nil,
-	CurrentValue = false,
-	Callback = function(v)
-		ESP.Names = v
-	end
-})
-
-EspTab:CreateToggle({
-	Name = "Toggle Tracer",
-	Description = nil,
-	CurrentValue = false,
-	Callback = function(v)
-		ESP.Tracers = v
-	end
-})
-
-EspTab:CreateToggle({
-	Name = "Toggle Boxes",
-	Description = nil,
-	CurrentValue = false,
-	Callback = function(v)
-		ESP.Boxes = v
-	end
-})
-
-EspTab:CreateToggle({
-	Name = "Toggle TeamColor",
-	Description = nil,
-	CurrentValue = false,
-	Callback = function(v)
-		ESP.TeamColor = v
-	end
-})
-
-EspTab:CreateColorPicker({
-	Name = "Color Picker",
-	Color = Color3.fromRGB(255, 255, 255),
-	Flag = "ColorPicker1",
-	Callback = function(v)
-		ESP.Color = v
-	end
-})
-
-local MiscTab = Window:CreateTab({
-	Name = "Misc",
-	Icon = "list_alt",
-	ImageSource = "Material",
-	ShowTitle = true
-})
-
-MiscTab:CreateLabel({
-	Text = "Teleport",
-	Style = 2
-})
-
-MiscTab:CreateButton({
-	Name = "Teleport To Map",
-	Description = nil,
-	Callback = function()
-		for i, v in pairs(game:GetService("Workspace"):GetDescendants()) do
-            if v:IsA("Folder") and v.Name == "SurvivorSpawns" then
-                for i, c in pairs(v:GetChildren()) do
-                    if c.Name == "Spawn" then
-                        game.Players.LocalPlayer.Character.PrimaryPart.CFrame = c.CFrame
+		getgenv().killaura = v
+        while getgenv().killaura do
+            wait()
+            for i, v in pairs(game.Players:GetPlayers()) do
+                if v ~= game.Players.LocalPlayer and game.Players.LocalPlayer.Team == game.Teams.Killer and v.Team == game.Teams.Survivor and game.Players.LocalPlayer.Character:FindFirstChild("Knife") and game.Players.LocalPlayer.Character.Knife:FindFirstChild("KnifeAttachment") and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                        if (v.Character.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude < setaura then
+                            firetouchinterest(v.Character.HumanoidRootPart, game.Players.LocalPlayer.Character.Knife.KnifeAttachment, 0)
+                            firetouchinterest(v.Character.HumanoidRootPart, game.Players.LocalPlayer.Character.Knife.KnifeAttachment, 1)
+                        end
                     end
                 end
             end
         end
-	end
+    end
 })
 
-MiscTab:CreateButton({
-	Name = "Teleport To Cabin",
-	Description = nil,
-	Callback = function()
-		for i, v in pairs(game:GetService("Workspace")._Lobby.Cabins:GetChildren()) do
+Tabs.Esp:AddToggle("Esp Players", {
+    Title = "Enable Esp",
+    Default = false,
+    Callback = function(v)
+        ESP.Players = v
+    end
+})
+
+Tabs.Esp:AddToggle("Esp Name", {
+    Title = "Player Name",
+    Default = false,
+    Callback = function(v)
+        ESP.Names = v
+    end
+})
+
+Tabs.Esp:AddToggle("Esp Tracer", {
+    Title = "Player Tracer",
+    Default = false,
+    Callback = function(v)
+        ESP.Tracers = v
+    end
+})
+
+Tabs.Esp:AddToggle("Esp Boxes", {
+    Title = "Player Box",
+    Default = false,
+    Callback = function(v)
+        ESP.Boxes = v
+    end
+})
+
+Tabs.Esp:AddToggle("Esp Teamcolor", {
+    Title = "Player TeamColor",
+    Default = false,
+    Callback = function(v)
+        ESP.TeamColor = v
+    end
+})
+
+Tabs.Esp:AddColorpicker("Esp ColorPick", {
+    Title = "Esp Color",
+    Default = Color3.fromRGB(255, 255, 255),
+    Callback = function(v)
+        ESP.Color = v
+    end
+})
+
+Tabs.Teleport:AddButton({
+    Title = "Teleport Cabin",
+    Callback = function()
+        for i, v in pairs(game:GetService("Workspace")._Lobby.Cabins:GetChildren()) do
             if v.Name == game.Players.LocalPlayer.Name then
                 for i, b in pairs(v:GetChildren()) do
                     if b.Name == "Spawn" then
@@ -486,57 +425,231 @@ MiscTab:CreateButton({
                 end
             end
         end
-	end
+    end
 })
 
-MiscTab:CreateButton({
-	Name = "Teleport To Lobby",
-	Description = nil,
-	Callback = function()
-		game.Players.LocalPlayer.Character.PrimaryPart.CFrame = game:GetService("Workspace")._Lobby.Spawns.SpawnLocation.CFrame
-	end
+Tabs.Teleport:AddButton({
+    Title = "Teleport Lobby",
+    Callback = function()
+        game.Players.LocalPlayer.Character.PrimaryPart.CFrame = game:GetService("Workspace")._Lobby.Spawns.SpawnLocation.CFrame
+    end
 })
 
-MiscTab:CreateDivider()
-MiscTab:CreateLabel({
-	Text = "Local Player",
-	Style = 2
+Tabs.Teleport:AddButton({
+    Title = "Teleport Map",
+    Callback = function()
+        for i, v in pairs(game:GetService("Workspace"):GetDescendants()) do
+            if v:IsA("Folder") and v.Name == "SurvivorSpawns" then
+                for i, c in pairs(v:GetChildren()) do
+                    if c.Name == "Spawn" then
+                        game.Players.LocalPlayer.Character.PrimaryPart.CFrame = c.CFrame
+                    end
+                end
+            end
+        end
+    end
 })
 
-MiscTab:CreateSlider({
-	Name = "WalkSpeed",
-	Range = {0, 1000},
-	Increment = 1,
-	CurrentValue = 16,
-	Callback = function(v)
-		setws = v
-	end
+Tabs.Teleport:AddButton({
+    Title = "Teleport Killer",
+    Callback = function()
+        for i, v in pairs(game.Players:GetPlayers()) do
+            if v ~= game.Players.LocalPlayer and v.Team == game.Teams.Killer then
+                game.Players.LocalPlayer.Character.PrimaryPart.CFrame = v.Character.HumanoidRootPart.CFrame
+            end
+        end
+    end
 })
 
-MiscTab:CreateToggle({
-	Name = "Toggle WalkSpeed",
-	Description = nil,
-	CurrentValue = false,
-	Callback = function(v)
-		getgenv().ws = v
+local Playerlist = Tabs.Teleport:AddDropdown("Player Dropdown Teleport", {
+    Title = "Teleport Selected Player",
+    Values = plr,
+    Multi = false,
+    Default = nil,
+    Callback = function(v)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players[v].Character.HumanoidRootPart.CFrame
+    end
+})
+
+Tabs.Misc:AddToggle("Noclip Toggle", {
+    Title = "Toggle Noclip",
+    Default = false,
+    Callback = function(v)
+        getgenv().noclip = v
+        game:GetService("RunService").RenderStepped:Connect(function()
+            if getgenv().noclip then
+                for _, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                    if v:IsA("BasePart") and v.CanCollide == true and v.Name ~= floatName then
+                        v.CanCollide = false
+                        if not getgenv().noclip then
+                            v.CanCollide = true
+                        end
+                    end
+                end
+            end
+        end)
+    end
+})
+Tabs.Misc:AddToggle("xray toggle", {
+    Title = "Toggle Xray",
+    Default = false,
+    Callback = function(v)
+        if v then
+            for _, i in pairs(workspace:GetDescendants()) do
+                if i:IsA("BasePart") and not i.Parent:FindFirstChildOfClass('Humanoid') and
+                    not i.Parent.Parent:FindFirstChildOfClass('Humanoid') then
+                    i.LocalTransparencyModifier = 0.5
+                end
+            end
+        else
+            for _, i in pairs(workspace:GetDescendants()) do
+                if i:IsA("BasePart") and not i.Parent:FindFirstChildOfClass('Humanoid') and
+                    not i.Parent.Parent:FindFirstChildOfClass('Humanoid') then
+                    i.LocalTransparencyModifier = 0
+                end
+            end
+        end
+    end
+})
+
+Tabs.Misc:AddToggle("spec killer", {
+    Title = "Spectate Killer",
+    Default = false,
+    Callback = function(v)
+        getgenv().spec = v
+        while getgenv().spec do
+            wait()
+            for i, v in pairs(game.Players:GetPlayers()) do
+                if v.Team == game.Teams.Killer then
+                    repeat wait()
+                        workspace.Camera.CameraSubject = v.Character
+                    until v.Team == game.Teams.Lobby or not getgenv().spec
+                    workspace.Camera.CameraSubject = game.Players.LocalPlayer.Character
+                end
+            end
+        end
+    end
+})
+
+Tabs.Misc:AddSlider("Slider", {
+    Title = "Set WalkSpeed",
+    Default = 16,
+    Min = 16,
+    Max = 500,
+    Rounding = 1,
+    Callback = function(v)
+        walkspeed = tonumber(v)
+    end
+})
+
+Tabs.Misc:AddToggle("ws toggle", {
+    Title = "Toggle Walkspeed",
+    Default = false,
+    Callback = function(v)
+        getgenv().ws = v
         while getgenv().ws do
             wait()
             if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
-                game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = setws
-            end
-            if not getgenv().ws then
-                if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+                game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkspeed
+                if not getgenv().ws then
                     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
                 end
             end
         end
-	end
+    end
 })
 
-MiscTab:CreateDivider()
+Tabs.Misc:AddToggle("inf jump", {
+    Title = "Toggle Inf Jump",
+    Default = false,
+    Callback = function(v)
+        getgenv().infjump = v
+        game:GetService("UserInputService").JumpRequest:connect(function()
+            if getgenv().infjump then
+                game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(
+                    "Jumping")
+            end
+        end)
+    end
+})
 
-MiscTab:CreateToggle({
-	Name = "Toggle FullBright",
+Tabs.Misc:AddButton({
+    Title = "Rejoin",
+    Callback = function()
+        local ts = game:GetService("TeleportService")
+        local p = game:GetService("Players").LocalPlayer
+        ts:Teleport(game.PlaceId, p)
+    end
+})
+
+Tabs.Misc:AddToggle("autorj", {
+    Title = "Auto Rejoin",
+    Default = true,
+    Callback = function(v)
+        getgenv().aj = v
+        game:GetService("GuiService").ErrorMessageChanged:Connect(function()
+            if getgenv().aj then
+                wait()
+                game:GetService("TeleportService"):Teleport(game.PlaceId)
+            end
+        end)
+    end
+})
+Tabs.Misc:AddButton({
+    Title = "ServerHop",
+    Callback = function()
+        HttpService = game:GetService("HttpService")
+        TeleportService = game:GetService("TeleportService")
+        httprequest = (syn and syn.request) or (http and http.request) or http_request or
+            (fluxus and fluxus.request) or request
+        PlaceId, JobId = game.PlaceId, game.JobId
+        if httprequest then
+            local servers = {}
+            local body = HttpService:JSONDecode(httprequest({
+                Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100",
+                    game.PlaceId)
+            }).Body)
+            if body and body.data then
+                for i, v in next, body.data do
+                    if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing <
+                        v.maxPlayers and v.id ~= JobId then
+                        table.insert(servers, 1, v.id)
+                    end
+                end
+            end
+            if #servers > 0 then
+                TeleportService:TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)],
+                    game.Players.LocalPlayer)
+            end
+        end
+    end
+})
+
+Tabs.Misc:AddButton({
+    Title = "Teleport To Small Server",
+    Description = "Server Hop Small Server",
+    Callback = function()
+        local Http = game:GetService("HttpService")
+        local TPS = game:GetService("TeleportService")
+        local Api = "https://games.roblox.com/v1/games/"
+        local _place = game.PlaceId
+        local _servers = Api .. _place .. "/servers/Public?sortOrder=Asc&limit=100"
+        function ListServers(cursor)
+            local Raw = game:HttpGet(_servers .. ((cursor and "&cursor=" .. cursor) or ""))
+            return Http:JSONDecode(Raw)
+        end
+        local Server, Next;
+        repeat
+            local Servers = ListServers(Next)
+            Server = Servers.data[6]
+            Next = Servers.nextPageCursor
+        until Server
+        TPS:TeleportToPlaceInstance(_place, Server.id, game.Players.LocalPlayer)
+    end
+})
+
+Tabs.Misc:AddToggle("Fullbright", {
+    Title = "Toggle FullBright",
 	Description = "Make Map Bright",
 	CurrentValue = false,
 	Callback = function(v)
@@ -646,111 +759,61 @@ end
 
 _G.FullBrightExecuted = v
 _G.FullBrightEnabled = not _G.FullBrightEnabled
-	end
+    end
 })
 
-MiscTab:CreateDivider()
-
-MiscTab:CreateToggle({
-	Name = "Toggle Noclip",
-	Description = nil,
-	CurrentValue = false,
-	Callback = function(v)
-        getgenv().noclip = v
-        if getgenv().noclip then
-            noclip()
-        else
-            clip()
-        end
-	end
-})
-
-MiscTab:CreateDivider()
-
-MiscTab:CreateLabel({
-	Text = "Server",
-	Style = 2
-})
-
-MiscTab:CreateButton({
-	Name = "Rejoin",
-	Description = nil,
-	Callback = function()
-		local tpservice = game:GetService("TeleportService")
-        local plr = game.Players.LocalPlayer
-        tpservice:Teleport(game.PlaceId, plr)
-	end
-})
-MiscTab:CreateButton({
-	Name = "ServerHop",
-	Description = nil,
-	Callback = function()
-		HttpService = game:GetService("HttpService")
-        TeleportService = game:GetService("TeleportService")
-        httprequest = (syn and syn.request) or (http and http.request) or http_request or
-            (fluxus and fluxus.request) or request
-        PlaceId, JobId = game.PlaceId, game.JobId
-        if httprequest then
-            local servers = {}
-            local body = HttpService:JSONDecode(httprequest({
-                Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100",
-                    game.PlaceId)
-            }).Body)
-            if body and body.data then
-                for i, v in next, body.data do
-                    if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing <
-                        v.maxPlayers and v.id ~= JobId then
-                        table.insert(servers, 1, v.id)
-                    end
-                end
-            end
-            if #servers > 0 then
-                TeleportService:TeleportToPlaceInstance(game.PlaceId, servers[math.random(1, #servers)],
-                    game.Players.LocalPlayer)
-            end
-        end
-	end
-})
-MiscTab:CreateButton({
-	Name = "Small Server",
-	Description = nil,
-	Callback = function()
-		local Http = game:GetService("HttpService")
-        local TPS = game:GetService("TeleportService")
-        local Api = "https://games.roblox.com/v1/games/"
-        local _place = game.PlaceId
-        local _servers = Api .. _place .. "/servers/Public?sortOrder=Asc&limit=100"
-        function ListServers(cursor)
-            local Raw = game:HttpGet(_servers .. ((cursor and "&cursor=" .. cursor) or ""))
-            return Http:JSONDecode(Raw)
-        end
-        local Server, Next;
-        repeat
-            local Servers = ListServers(Next)
-            Server = Servers.data[16]
-            Next = Servers.nextPageCursor
-        until Server
-        TPS:TeleportToPlaceInstance(_place, Server.id, game.Players.LocalPlayer)
-	end
-})
-MiscTab:CreateButton({
-	Name = "Less Lagging",
-	Description = nil,
-	Callback = function()
-		mx = game.Debris
-        mx3 = game.Debris.MaxItems
+Tabs.Misc:AddButton({
+    Title = "Less Lagging",
+    Callback = function()
+        local mx = game.Debris
+        local mx3 = game.Debris.MaxItems
         if (mx.MaxItems > 9999999999) then
-            mx.MaxItems = mx2 * .9999999999
+            mx.MaxItems = mx3 * .9999999999
         end
         wait()
         setfpscap(1000)
-	end
+    end
 })
 
-local ConfigTab = Window:CreateTab({
-	Name = "Config Tab",
-	Icon = "settings",
-	ImageSource = "Material",
-	ShowTitle = true
-})
-ConfigTab:BuildConfigSection()
+--plr update
+game.Players.PlayerAdded:Connect(function(PlayerAdd)
+    if PlayerAdd ~= game.Players.LocalPlayer then
+        table.insert(plr, PlayerAdd.Name)
+        Playerlist:SetValues()
+    end
+end)
+
+game.Players.PlayerRemoving:Connect(function(PlayerRem)
+    for index, playerName in pairs(plr) do
+        if playerName == PlayerRem.Name then
+            table.remove(plr, index)
+        end
+    end
+    Playerlist:SetValues()
+end)
+
+--survivorupdatekill
+game.Teams.Survivor.PlayerAdded:Connect(function(PlayerAdded)
+    if PlayerAdded ~= game.Players.LocalPlayer then
+        table.insert(PlayerList, PlayerAdded.Name)
+        Killone:SetValues()
+    end
+end)
+
+game.Teams.Survivor.PlayerRemoved:Connect(function(PlayerRemoving)
+    for index, playerName in pairs(PlayerList) do
+        if playerName == PlayerRemoving.Name then
+            table.remove(PlayerList, index)
+        end
+    end
+    Killone:SetValues()
+end)
+-- config
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+InterfaceManager:SetFolder("Folder")
+SaveManager:SetFolder("Folder/GameFolder")
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+Window:SelectTab(1)
+SaveManager:LoadAutoloadConfig()
