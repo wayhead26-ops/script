@@ -2365,4 +2365,83 @@ local ConfigTab = Window:CreateTab({
 	ShowTitle = true
 })
 ConfigTab:BuildConfigSection()
+elseif game.PlaceId == 115681808123944 then
+    local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/memejames/elerium-v2-ui-library//main/Library", true))()
+local window = library:AddWindow(tostring(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name), {
+	main_color = Color3.fromRGB(41, 74, 122),
+	min_size = Vector2.new(250, 346),
+	can_resize = false,
+})
+
+local Main = window:AddTab("Main")
+
+Main:AddSwitch("Toggle Throw",
+function(v)
+	getgenv().throw = v
+	while getgenv().throw do
+    wait()
+    if game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1193.21814, 4.30752087, -169.29364, -0.0174531117, 8.06352745e-08, -0.99984771, 1.03676658e-10, 1, 8.06457479e-08, 0.99984771, 1.30385835e-09, -0.0174531117)
+    end
+    local args = {
+	        2,
+	        vector.create(-1160.94580078125, 0.7260000109672546, -160.92034912109375),
+	        tostring(game:GetService("Players").LocalPlayer.PlayerGui.UiFolder.Main.HUD.Coin.Main.CoinName.Text)
+        }
+    game:GetService("ReplicatedStorage"):WaitForChild("Assets"):WaitForChild("Events"):WaitForChild("CoinLanded"):FireServer(unpack(args))
+    end
+end)
+
+Main:AddSwitch("Toggle Sell",
+function(v)
+	getgenv().sell = v
+    while getgenv().sell do
+        wait()
+        game:GetService("ReplicatedStorage"):WaitForChild("Assets"):WaitForChild("Events"):WaitForChild("SellAll"):FireServer()
+    end
+end)
+
+local Upgrade = window:AddTab("Upgrade")
+
+Upgrade:AddSwitch("Toggle Upgrade Luck",
+function(v)
+    getgenv().luck = v
+    while getgenv().luck do
+        wait()
+        local args = {
+	        "Luck Multiplier"
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("Assets"):WaitForChild("Events"):WaitForChild("RequestUpgrade"):FireServer(unpack(args))
+    end
+end)
+
+Upgrade:AddSwitch("Toggle Upgrade Value",
+function(v)
+getgenv().value = v
+while getgenv().value do
+    wait()
+    local args = {
+	    "Value Multiplier"
+    }
+    game:GetService("ReplicatedStorage"):WaitForChild("Assets"):WaitForChild("Events"):WaitForChild("RequestUpgrade"):FireServer(unpack(args))
+	end
+end)
+
+local Shop = window:AddTab("Shop")
+
+
+Shop:AddSwitch("Toggle Buy Coin",
+function(v)
+	getgenv().buycoin = v
+    while getgenv().buycoin do
+        wait()
+        for i,v in pairs(game:GetService("ReplicatedStorage").Assets.Assets.Coins:GetChildren()) do
+            local args = {
+	            tostring(v)
+            }
+            game:GetService("ReplicatedStorage"):WaitForChild("Assets"):WaitForChild("Events"):WaitForChild("BuyCoin"):FireServer(unpack(args))
+        end
+    end
+end)
+Main:Show()
 end
