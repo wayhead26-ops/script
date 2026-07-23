@@ -1375,7 +1375,7 @@ WorkoutTab:CreateDropdown({
 	MultipleOptions = false,
 	SpecialType = nil,
 	Callback = function(v)
-		selectrocselectliftk = v
+		selectlift = v
 	end
 })
 
@@ -2365,7 +2365,7 @@ local ConfigTab = Window:CreateTab({
 	ShowTitle = true
 })
 ConfigTab:BuildConfigSection()
-elseif game.PlaceId == 115681808123944 then
+elseif game.PlaceId == 115681808123944 or game.PlaceId == 72042130041700 then
     local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/memejames/elerium-v2-ui-library//main/Library", true))()
 local window = library:AddWindow(tostring(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name), {
 	main_color = Color3.fromRGB(41, 74, 122),
